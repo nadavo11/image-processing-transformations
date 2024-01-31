@@ -38,22 +38,73 @@
 % 
 % 
 
+% __________________________________________________
+%|                                                  |
+%|                                                  |
+%|            1.1 2D-Fourier Transform              |
+%|                                                  |
+%|__________________________________________________|
+
+% part 3
+%% 
+% let's read the beatles.png image, convert it to grayscale, and normalize to 
+% $\in \left\lbrack 0,1\right\rbrack$
+
 I = imread_normalized("beatles.png");
 
+% 4
 my_FFT = dip_fft2(I);
 F = fft2(I);
-imshow(my_FFT)
-imshow(F)
-imshow(F-my_FFT)
+imshow(real(my_FFT))
+imshow(real(F))
+imshow(F-my_FFT);
+% 
 
-%%
 
-% compute MSE
-mse = mean(mean((F - my_FFT) .^ 2))
+% Reconstruct the original image
+% by using your inverse-FFT function. Is it identical to the original image? 
+% Note that the output of the iFFT are complex numbers - you should display only 
+% the real part of the image using imshow(real(-))
 
-img = dip_ifft2(my_FFT)
-imshow(img)
+reconstructed_img = dip_ifft2(my_FFT);
+imshow(reconstructed_img)
+%% 
+% but are they identical? to answer that we will compute the error, to estimate 
+% the loss to the original image by applying $F^{-1} \left\lbrace F\left\lbrace 
+% I\left(m,n\right)\right\rbrace \right\rbrace$ 
+
+mse = mean(mean((reconstructed_img - I) .^ 2))
 %% 
 % 
-% 
-%
+%% 1.2 Transformation properties
+
+load("freewilly.mat");
+imshow(freewilly)
+% b. find the frequency of the bars
+
+row1 = freewilly(1,:)
+plot(row1);
+F = fft(row1);
+grid on
+plot(imag(F));
+grid on
+ [argvalue, argmin] = min(imag(F))
+ [argvalue, argmax] = max(imag(F))
+%% 
+% we get that $f_x =10$ and so the sinusoidal bars follow the equation of $\sin 
+% \left(\frac{2\pi }{N}\cdot 10x\right)$. it makes a lot of sense that this is 
+% a good estimation, because there are roughly 10 bars in total of N pixels.
+
+[M, N] = size(freewilly)
+bars = 0.5*sin(2*(pi/N)*10*(1:N))
+bars = repmat(bars,M,1)
+imshow(bars)
+%% 
+% d.Compute the 2D-FFT of the prison bars image, and display its amplitude
+
+bars_fft = fft2(bars)
+imshow(bars_fft)
+willy_fft = fft2(freewilly);
+willy_fft = willy_fft - 1.08*bars_fft;
+willy_free = ifft2(willy_fft);
+imshow(willy_free)
