@@ -119,7 +119,7 @@ grid on
 % by plotting the imaginary part we can use the descrete transform identity 
 % $\mathcal{F}\left\lbrace \sin \left(\frac{2\pi f_x }{N}\;x\right)\right\rbrace 
 % \propto\;i\delta \left(N-f_x \right)-i\delta \left(f_x \right)$ . so we can 
-% find $f_x$ by taking the $\underset{k\in \left\lbrack 0,639\right\rbrack }{\mathrm{argmax}} 
+% find $f_x$ by taking the $\underset{k\in \left\lbrack 0,639\right\rbrack }{\textrm{argmax}} 
 % \left(\mathcal{F}\left\lbrace \sin \left(\frac{2\pi f_x }{N}\;x\right)\right\rbrace 
 % \left(k\right)\right)$
 % 
@@ -158,7 +158,7 @@ imshow(willy_free)
 
 A = zeros(128,128);
 
-A(45:84,45:84) = 1;
+A(44:83,44:83) = 1;
 
 figure;
 imshow(A);
@@ -202,3 +202,30 @@ title('im(F\{A\})')
 subplot(1, 3, 3);
 imshow(real(FA));
 title('re(F\{A\})')
+%% 
+% (c) now we place a rectangle at the center,
+
+A = zeros(128,128);
+
+A(24:103,54:73) = 1;
+
+figure;
+imshow(A);
+title('A matrix');
+
+FA = fft2(A);
+figure;
+subplot(1, 3, 1);
+imshow(abs(FA));
+title('|F\{A\}|')
+
+subplot(1, 3, 2);
+imshow(imag(FA));
+title('im(F\{A\})')
+subplot(1, 3, 3);
+imshow(real(FA));
+title('re(F\{A\})')
+
+figure;
+middlerow = abs(FA(64,:));
+plot(middlerow);
