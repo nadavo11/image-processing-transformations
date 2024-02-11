@@ -1,3 +1,6 @@
+%Iris Eting 209027333
+%Nadav Orenstein 312349509
+
 function I_normalized = imread_normalized(src)
     I = imread(src);
     I = rgb2gray(I);
